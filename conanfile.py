@@ -4,7 +4,7 @@ class GladConan(ConanFile):
     name = "glad"
     version = "0.1.14"
     license = "MIT"
-    url = "<Package recipe repository url here, for issues about the package>"
+    url = "https://github.com/int010h/conan-glad"
     description = "Multi-Language GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs."
     settings = "os", "compiler", "build_type", "arch"
     options = {
