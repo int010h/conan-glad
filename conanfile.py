@@ -2,7 +2,7 @@ from conans import ConanFile, CMake, tools
 
 class GladConan(ConanFile):
     name = "glad"
-    version = "0.1.14"
+    version = "0.1.24"
     license = "MIT"
     url = "https://github.com/int010h/conan-glad"
     description = "Multi-Language GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs."
@@ -13,7 +13,8 @@ class GladConan(ConanFile):
         "spec": ["gl", "egl", "glx", "wgl"],
         "generator": ["c", "c-debug", "d", "volt"],
         "no-loader": [True, False],
-        "extensions": "ANY"
+        "extensions": "ANY",
+        "PIC": [True, False]
     }
     default_options = '''
 profile=core
@@ -22,15 +23,21 @@ spec=gl
 generator=c
 no-loader=False
 extensions=
+PIC=True
 '''
     generators = "cmake"
 
     def source(self):
-        self.run("git clone https://github.com/Dav1dde/glad.git")
-        self.run("cd glad && git checkout v0.1.14a0")
-        tools.replace_in_file("glad/CMakeLists.txt", "project(GLAD)", '''project(GLAD)
+        project_header = "project(GLAD VERSION %s LANGUAGES C)" % self.version
+        self.run("git clone -b 'v%s' --single-branch --depth 1 https://github.com/Dav1dde/glad.git" % self.version)
+        self.run("cd glad && git checkout v0.1.24")
+        tools.replace_in_file("glad/CMakeLists.txt", project_header, '''%s
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()''')
+conan_basic_setup()''' % project_header)
+
+        if self.options["PIC"] == True:
+            tools.replace_in_file("glad/CMakeLists.txt", project_header, '''%s
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)''' % project_header)
 
     def build(self):
         cmake = CMake(self)
