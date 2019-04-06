@@ -2,7 +2,7 @@ from conans import ConanFile, CMake, tools
 
 class GladConan(ConanFile):
     name = "glad"
-    version = "0.1.24"
+    version = "0.1.29"
     license = "MIT"
     url = "https://github.com/int010h/conan-glad"
     description = "Multi-Language GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs."
@@ -30,7 +30,7 @@ PIC=True
     def source(self):
         project_header = "project(GLAD VERSION %s LANGUAGES C)" % self.version
         self.run("git clone -b 'v%s' --single-branch --depth 1 https://github.com/Dav1dde/glad.git" % self.version)
-        self.run("cd glad && git checkout v0.1.24")
+        self.run("cd glad && git checkout v%s" % self.version)
         tools.replace_in_file("glad/CMakeLists.txt", project_header, '''%s
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()''' % project_header)

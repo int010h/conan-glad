@@ -7,6 +7,5 @@ int main() {
         std::cout << "Cannot initialize GL! But that's okay :)\n";
     }
 
-    std::cout << "GL version: " << GLVersion.major << "." << GLVersion.minor << "\n";
     return 0;
 }
